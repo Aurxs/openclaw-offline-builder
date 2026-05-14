@@ -128,11 +128,6 @@ cp -a /usr/local/lib/node_modules/npm /output/payload/node_modules_npm
 # deb 包 (运行时依赖)
 cp /var/cache/apt/archives/*.deb /output/payload/debs/
 
-# 清理不必要文件减小体积
-rm -rf /output/payload/node_modules_openclaw/docs 2>/dev/null || true
-rm -rf /output/payload/node_modules_openclaw/test 2>/dev/null || true
-rm -rf /output/payload/node_modules_openclaw/qa 2>/dev/null || true
-
 echo ""
 echo "============================================"
 echo "  构建完成"
