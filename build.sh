@@ -214,7 +214,7 @@ START_SCRIPT=$(cat <<'START_EOF'
 export OPENAI_API_KEY="sk-your-key-here"
 
 # 启动 gateway
-openclaw gateway --port 18789 --verbose
+openclaw gateway run --port 18789 --bind lan
 START_EOF
 )
 
