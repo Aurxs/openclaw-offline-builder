@@ -271,7 +271,10 @@ cat > "$BUILD_DIR/README.txt" <<'README_EOF'
 OpenClaw 离线安装包 (ARM64 Ubuntu 20.04)
 
 安装:
+  # 使用压缩包
   tar xzf openclaw-offline-arm64.tar.gz
+  # 或使用未压缩包
+  tar xf openclaw-offline-arm64.tar
   cd openclaw-offline-arm64
   sudo bash install.sh
 
@@ -288,13 +291,18 @@ README_EOF
 
 # 打包
 info "打包..."
-PACKAGE_PATH="$OUTPUT_DIR/${PACKAGE_NAME}.tar.gz"
-tar czf "$PACKAGE_PATH" -C "$BUILD_DIR" .
+PACKAGE_PATH_GZ="$OUTPUT_DIR/${PACKAGE_NAME}.tar.gz"
+PACKAGE_PATH_TAR="$OUTPUT_DIR/${PACKAGE_NAME}.tar"
+tar czf "$PACKAGE_PATH_GZ" -C "$BUILD_DIR" .
+tar cf "$PACKAGE_PATH_TAR" -C "$BUILD_DIR" .
 
-SIZE=$(ls -lh "$PACKAGE_PATH" | awk '{print $5}')
+SIZE_GZ=$(ls -lh "$PACKAGE_PATH_GZ" | awk '{print $5}')
+SIZE_TAR=$(ls -lh "$PACKAGE_PATH_TAR" | awk '{print $5}')
 echo ""
 info "========================================="
 info "  构建完成!"
-info "  输出: $PACKAGE_PATH"
-info "  大小: $SIZE"
+info "  输出: $PACKAGE_PATH_GZ"
+info "  大小: $SIZE_GZ"
+info "  输出: $PACKAGE_PATH_TAR"
+info "  大小: $SIZE_TAR"
 info "========================================="

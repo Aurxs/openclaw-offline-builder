@@ -19,7 +19,7 @@ OPENCLAW_VERSION=2026.5.7 bash build.sh
 PLATFORM=linux/amd64 bash build.sh
 ```
 
-输出: `openclaw-offline-arm64.tar.gz`
+输出: `openclaw-offline-arm64.tar.gz` / `openclaw-offline-arm64.tar`
 
 ## 自动构建
 
@@ -31,7 +31,10 @@ GitHub Actions 每天凌晨 2 点 (北京时间) 自动构建并发布 Release�
 
 ```bash
 # 传输到目标机后
+# 使用压缩包
 tar xzf openclaw-offline-arm64.tar.gz
+# 或使用未压缩包
+tar xf openclaw-offline-arm64.tar
 cd openclaw-offline-arm64
 sudo bash install.sh           # 安装 (无需联网)
 cp openclaw.json ~/.openclaw/openclaw.json

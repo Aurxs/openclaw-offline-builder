@@ -60,11 +60,16 @@ jobs:
 
             ### 使用方法
             ```bash
+            # 使用压缩包
             tar xzf openclaw-offline-arm64.tar.gz
+            # 或使用未压缩包
+            tar xf openclaw-offline-arm64.tar
             cd openclaw-offline-arm64
             sudo bash install.sh
             ```
-          files: openclaw-offline-arm64.tar.gz
+          files: |
+            openclaw-offline-arm64.tar.gz
+            openclaw-offline-arm64.tar
           draft: false
           prerelease: false
         env:
