@@ -233,11 +233,6 @@ DEFAULT_CONFIG='{
 # ─── 主构建流程 ──────────────────────────────────────────────
 cleanup() {
   docker rm -f "$CONTAINER_NAME" 2>/dev/null || true
-  # Docker 容器内文件属于 root，需要提权清理
-  if [ -n "${BUILD_DIR:-}" ] && [ -d "$BUILD_DIR" ]; then
-    chmod -R a+rwX "$BUILD_DIR" 2>/dev/null || true
-    rm -rf "$BUILD_DIR" 2>/dev/null || true
-  fi
 }
 trap cleanup EXIT
 
@@ -291,15 +286,10 @@ OpenClaw 离线安装包 (ARM64 Ubuntu 20.04)
   openclaw --version
 README_EOF
 
-# 修复 Docker 容器创建的 root 文件权限
-chmod -R a+rX "$BUILD_DIR/payload"
-
 # 打包
 info "打包..."
 PACKAGE_PATH="$OUTPUT_DIR/${PACKAGE_NAME}.tar.gz"
 tar czf "$PACKAGE_PATH" -C "$BUILD_DIR" .
-
-# 清理由 cleanup trap 处理
 
 SIZE=$(ls -lh "$PACKAGE_PATH" | awk '{print $5}')
 echo ""
