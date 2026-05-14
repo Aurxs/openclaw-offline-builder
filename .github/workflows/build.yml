@@ -1,0 +1,73 @@
+name: Build OpenClaw Offline Package
+
+on:
+  schedule:
+    - cron: '0 18 * * *'  # 每天凌晨 2 点 (北京时间 UTC+8)
+  workflow_dispatch:
+    inputs:
+      openclaw_version:
+        description: 'OpenClaw 版本 (留空使用 latest)'
+        required: false
+        default: 'latest'
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+        with:
+          platforms: arm64
+
+      - name: Build offline package
+        run: bash build.sh
+        env:
+          OPENCLAW_VERSION: ${{ github.event.inputs.openclaw_version || 'latest' }}
+
+      - name: Get version info
+        id: version
+        run: |
+          # 从构建产物中提取 openclaw 版本
+          mkdir -p /tmp/verify
+          tar xzf openclaw-offline-arm64.tar.gz -C /tmp/verify
+          VERSION=$(docker run --rm --platform linux/arm64 \
+            -v /tmp/verify/openclaw-offline-arm64/payload:/p \
+            ubuntu:20.04 bash -c "
+              cp -a /p/node_modules_openclaw /tmp/oc 2>/dev/null
+              cat /tmp/oc/package.json 2>/dev/null | grep '\"version\"' | head -1 | sed 's/.*: \"\(.*\)\".*/\1/'
+            " 2>/dev/null || echo "unknown")
+          rm -rf /tmp/verify
+          echo "openclaw_version=$VERSION" >> "$GITHUB_OUTPUT"
+          echo "date=$(date +%Y%m%d)" >> "$GITHUB_OUTPUT"
+
+      - name: Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: v${{ steps.version.outputs.date }}
+          name: OpenClaw ${{ steps.version.outputs.openclaw_version }} (${{ steps.version.outputs.date }})
+          body: |
+            OpenClaw 离线安装包 (ARM64 Ubuntu 20.04)
+
+            - OpenClaw: `${{ steps.version.outputs.openclaw_version }}`
+            - Node.js: v24
+            - 构建时间: ${{ github.event.repository.updated_at }}
+
+            ### 使用方法
+            ```bash
+            tar xzf openclaw-offline-arm64.tar.gz
+            cd openclaw-offline-arm64
+            sudo bash install.sh
+            ```
+          files: openclaw-offline-arm64.tar.gz
+          draft: false
+          prerelease: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
