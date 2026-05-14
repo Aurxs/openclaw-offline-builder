@@ -233,6 +233,10 @@ DEFAULT_CONFIG='{
 # ─── 主构建流程 ──────────────────────────────────────────────
 cleanup() {
   docker rm -f "$CONTAINER_NAME" 2>/dev/null || true
+  # 本地环境清理临时目录，GitHub Actions 由 runner 自动清理
+  if [ -z "${GITHUB_ACTIONS:-}" ] && [ -n "${BUILD_DIR:-}" ] && [ -d "$BUILD_DIR" ]; then
+    rm -rf "$BUILD_DIR" 2>/dev/null || true
+  fi
 }
 trap cleanup EXIT
 
