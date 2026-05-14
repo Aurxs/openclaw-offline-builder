@@ -35,7 +35,6 @@ tar xzf openclaw-offline-arm64.tar.gz
 cd openclaw-offline-arm64
 sudo bash install.sh           # 安装 (无需联网)
 cp openclaw.json ~/.openclaw/openclaw.json
-vim start-openclaw.sh          # 填入 OPENAI_API_KEY
 bash start-openclaw.sh         # 启动
 ```
 
