@@ -34,7 +34,7 @@ GitHub Actions 每天凌晨 2 点 (北京时间) 自动构建并发布 Release�
 tar xzf openclaw-offline-arm64.tar.gz
 cd openclaw-offline-arm64
 sudo bash install.sh           # 安装 (无需联网)
-cp openclaw.json ~/.openclaw/openclaw.json
+openclaw setup
 bash start-openclaw.sh         # 启动
 ```
 
