@@ -35,7 +35,6 @@ jobs:
       - name: Get version info
         id: version
         run: |
-          # 从构建产物中提取 openclaw 版本
           mkdir -p /tmp/verify
           tar xzf openclaw-offline-arm64.tar.gz -C /tmp/verify
           VERSION=$(docker run --rm --platform linux/arm64 \
@@ -44,7 +43,6 @@ jobs:
               cp -a /p/node_modules_openclaw /tmp/oc 2>/dev/null
               cat /tmp/oc/package.json 2>/dev/null | grep '\"version\"' | head -1 | sed 's/.*: \"\(.*\)\".*/\1/'
             " 2>/dev/null || echo "unknown")
-          rm -rf /tmp/verify
           echo "openclaw_version=$VERSION" >> "$GITHUB_OUTPUT"
           echo "date=$(date +%Y%m%d)" >> "$GITHUB_OUTPUT"
 
