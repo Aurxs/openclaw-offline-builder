@@ -21,11 +21,10 @@ PLATFORM=linux/amd64 bash build.sh
 
 输出: `openclaw-offline-arm64.tar.gz`
 
-## 自动构建
+## 手动构建（GitHub Actions）
 
-GitHub Actions 每天凌晨 2 点 (北京时间) 自动构建并发布 Release。
-
-手动触发: Actions → Build OpenClaw Offline Package → Run workflow
+如有需要，请先 fork 本仓库，在你的 fork 中进入 Actions 手动运行
+`Build OpenClaw Offline Package` 工作流（可选填写 OpenClaw 版本）。
 
 ## 目标机使用
 
